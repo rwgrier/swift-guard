@@ -6,15 +6,15 @@
 import UIKit
 
 enum ValidationResults {
-    case Valid, UsernameExists, InvalidUsername, InvalidPassword, NotValidated
+    case valid, usernameExists, invalidUsername, invalidPassword, notValidated
 }
 
 var usernameField: UITextField = UITextField()
 var passwordField: UITextField = UITextField()
-var validationResults: ValidationResults = .NotValidated
+var validationResults: ValidationResults = .notValidated
 
 func submitFormGuard() {
-    guard (validationResults == .Valid) else {
+    guard (validationResults == .valid) else {
         return
     }
     
@@ -22,7 +22,7 @@ func submitFormGuard() {
 }
 
 func submitFormIf() {
-    if (validationResults != .Valid) {
+    if (validationResults != .valid) {
         return
     }
     
@@ -30,52 +30,52 @@ func submitFormIf() {
 }
 
 func validateFormGuard() {
-    guard let username = usernameField.text, password = passwordField.text else {
+    guard let username = usernameField.text, let password = passwordField.text else {
         return
     }
     
-    guard username.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 3 else {
-        validationResults = .InvalidUsername
+    guard username.lengthOfBytes(using: String.Encoding.utf8) > 3 else {
+        validationResults = .invalidUsername
         return
     }
     
-    guard password.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 3 else {
-        validationResults = .InvalidPassword
+    guard password.lengthOfBytes(using: String.Encoding.utf8) > 3 else {
+        validationResults = .invalidPassword
         return
     }
     
     guard usernameExists(username) else {
-        validationResults = .UsernameExists
+        validationResults = .usernameExists
         return
     }
     
-    validationResults = .Valid
+    validationResults = .valid
 }
 
 func validateFormIfs() {
-    if let username = usernameField.text, password = passwordField.text {
-        if username.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 3 {
-            if password.lengthOfBytesUsingEncoding(NSUTF8StringEncoding) > 3 {
+    if let username = usernameField.text, let password = passwordField.text {
+        if username.lengthOfBytes(using: String.Encoding.utf8) > 3 {
+            if password.lengthOfBytes(using: String.Encoding.utf8) > 3 {
                 if !usernameExists(username) {
-                    validationResults = .Valid
+                    validationResults = .valid
                 }
                 else {
-                    validationResults = .UsernameExists
+                    validationResults = .usernameExists
                 }
             }
             else {
-                validationResults = .InvalidPassword
+                validationResults = .invalidPassword
             }
         }
         else {
-            validationResults = .InvalidUsername
+            validationResults = .invalidUsername
         }
     }
 }
 
-func usernameExists(username: String) -> Bool {
+func usernameExists(_ username: String) -> Bool {
     return false
 }
 
-submitFormIf()
-submitFormGuard()
+validateFormGuard()
+validateFormIfs()
